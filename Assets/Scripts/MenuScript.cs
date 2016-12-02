@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using Leap.Unity.DetectionExamples;
+using Leap.Unity;
 
 public class MenuScript : MonoBehaviour {
 
@@ -25,7 +25,7 @@ public class MenuScript : MonoBehaviour {
 	public GameObject robot;
 
 	//Other variables
-	public PinchDraw pinchDraw;
+	public PaintVR pinchDraw;
 	private bool menuIsActive;
 
 	void Start () {
