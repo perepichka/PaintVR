@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Leap.Unity;
 using PaintUtilities;
-using FluvioSelections;
 
 public class Paint : MonoBehaviour {
 
@@ -14,7 +13,7 @@ public class Paint : MonoBehaviour {
 	// Paint material / shader
 	public Material[] materials;
 
-	// Paint line thicknessfloat thickness;
+	// Paint line thickness
 	public float thickness;
 
 	// Paint line resolution
@@ -25,6 +24,7 @@ public class Paint : MonoBehaviour {
 
     // Fluid obj
     public GameObject fluid;
+    public List<GameObject> fluids;
     public float timeDelay;
     public float timeDelayMax;
 
@@ -46,25 +46,23 @@ public class Paint : MonoBehaviour {
 		foreach (PinchDetector pd in pinchDetectors) {
 			if (pd.DidStartPinch) {
                 // Spawns fluid at point
-                fluid = Instantiate(fluid);
+                fluids.Add(Instantiate(fluid));
                 Vector3 pos = pd.transform.position;
                 pos.y = -pos.y;
-                fluid.transform.position = pos;
+                fluids[fluids.Count - 1].transform.position = pos;
 				paintLines [index].InitPaintLine ();
 			}
 			if (pd.DidRelease) {
-                paintLines [index].EndPaintLine();
-				fluid.GetComponent<ParticleSystem> ().gravityModifier = -0.1f;
-				//Destroy (fluid);
+                paintLines [index].EndPaintLine ();
 			}
 			if (pd.IsHolding) {
-                //timeDelay += Time.deltaTime;
+                timeDelay += Time.deltaTime;
                 //if (timeDelay > timeDelayMax)
                 //{
-                    Vector3 pos = pd.transform.position;
-                    pos.y = -pos.y;
-                    fluid.transform.position = pos;
-                    timeDelay = 0.0f;
+                Vector3 pos = pd.transform.position;
+                pos.y = -pos.y;
+                fluids[fluids.Count -1].transform.position = pos;
+                timeDelay = 0.0f;
                 //}
 				paintLines [index].UpdatePaintLine (pd.Position);
 			}
