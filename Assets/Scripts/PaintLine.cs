@@ -20,6 +20,9 @@ namespace PaintUtilities {
 		private Vector3[] previousRings;
 		private Vector3 previousNormal;
 
+		private float pinchStrength = 1f;
+		private float handSpeed = 0f;
+
 		public PaintLine (Paint parent) {
 			this.parent = parent;
 			position = new SmoothedVector3 ();
@@ -60,7 +63,9 @@ namespace PaintUtilities {
 			mesh.UploadMeshData (true);
 		}
 
-		public void UpdatePaintLine(Vector3 position) {
+		public void UpdatePaintLine(Vector3 position, float pinchStrength, float handSpeed) {
+			this.pinchStrength = pinchStrength;
+			this.handSpeed = handSpeed;
 			this.position.Update (position, Time.deltaTime);
 			if (Vector3.Distance (previousRings[0], this.position.value) >= 0.005
 			    || vertices.Count == 0) {
@@ -148,7 +153,7 @@ namespace PaintUtilities {
 			for (int i = 0; i < parent.resolution; i++) {
 				float angle = 360.0f * (i / (float)(parent.resolution));
 				Quaternion rotator = Quaternion.AngleAxis(angle, direction);
-				Vector3 ringSpoke = rotator * normal * parent.thickness * radiusScale;
+				Vector3 ringSpoke = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.1f, handSpeed)) * radiusScale;
 				vertices[offset + i] = position + ringSpoke;
 			}
 		}

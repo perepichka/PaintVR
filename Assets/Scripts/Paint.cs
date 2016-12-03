@@ -22,8 +22,10 @@ public class Paint : MonoBehaviour {
 	// Paint lines
 	private PaintLine[] paintLines;
 
+	private bool painting;
+
 	void Awake() {
-		thickness = 0.0015f;
+		//thickness = 0.0015f;
 		resolution = 3;
 	}
 
@@ -38,15 +40,20 @@ public class Paint : MonoBehaviour {
 		// Update each pinch detector (one per hand)
 		int index = 0;
 		foreach (PinchDetector pd in pinchDetectors) {
+			float strength = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PinchStrength : 0f;
+			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
+
 			if (pd.DidStartPinch) {
+				painting = true;
 				paintLines [index].InitPaintLine ();
 			}
 			if (pd.DidRelease) {
+				painting = false;
 				paintLines [index].EndPaintLine ();
 			}
 			if (pd.IsHolding) {
-				
-				paintLines [index].UpdatePaintLine (pd.Position);
+				print (pd.hand.GetLeapHand ().PinchStrength);
+				paintLines [index].UpdatePaintLine (pd.Position, pd.hand.GetLeapHand().PinchStrength, speed);
 			}
 		}
 	}

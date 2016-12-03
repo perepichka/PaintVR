@@ -10,6 +10,8 @@ namespace Leap.Unity {
   public class PinchDetector : AbstractHoldDetector {
     protected const float MM_TO_M = 0.001f;
 
+	public PolyHand hand;
+
     public float ActivateDistance = .03f; //meters
     public float DeactivateDistance = .04f; //meters
     public bool IsPinching { get { return this.IsHolding; } }
