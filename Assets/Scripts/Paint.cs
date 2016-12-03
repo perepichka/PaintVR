@@ -44,24 +44,25 @@ public class Paint : MonoBehaviour {
 		int index = 0;
 		foreach (PinchDetector pd in pinchDetectors) {
 			if (pd.DidStartPinch) {
+                // Spawns fluid at point
+                fluid = Instantiate(fluid);
+                Vector3 pos = pd.transform.position;
+                pos.y = -pos.y;
+                fluid.transform.position = pos;
 				paintLines [index].InitPaintLine ();
 			}
 			if (pd.DidRelease) {
-				paintLines [index].EndPaintLine ();
+                paintLines [index].EndPaintLine ();
 			}
 			if (pd.IsHolding) {
-
-                // Spawns fluid at point
-
                 timeDelay += Time.deltaTime;
-                if(timeDelay > timeDelayMax)
+                if (timeDelay > timeDelayMax)
                 {
-                    Instantiate(fluid, pd.transform);
+                    Vector3 pos = pd.transform.position;
+                    pos.y = -pos.y;
+                    fluid.transform.position = pos;
                     timeDelay = 0.0f;
                 }
-
-
-				
 				paintLines [index].UpdatePaintLine (pd.Position);
 			}
 		}

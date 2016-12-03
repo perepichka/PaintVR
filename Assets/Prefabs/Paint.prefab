@@ -68,7 +68,7 @@ Transform:
   m_GameObject: {fileID: 1000010475433882}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0.13, z: 1.49}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011214705074}
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_FluidType: 0
   m_Dimensions: 0
   m_CullingType: 0
-  m_SmoothingDistance: 0.7
+  m_SmoothingDistance: 2
   m_ParticleMass: 7.625
   m_Density: 1012.44
   m_MinimumDensity: 499.145
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Prewarm: 0
 --- !u!114 &114000012302677900
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010475433882}
@@ -245,7 +245,7 @@ MonoBehaviour:
   useMultiTouch: 1
 --- !u!114 &114000013052314600
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010475433882}
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: 5cd204c54acac774099c3196e934a100, type: 2}
 --- !u!198 &198000014131261304
 ParticleSystem:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010475433882}
@@ -487,7 +487,7 @@ ParticleSystem:
       maxColor: {r: 0.5294118, g: 0, b: 1, a: 1}
       minMaxState: 0
     startSize:
-      scalar: 40
+      scalar: 20
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -688,7 +688,7 @@ ParticleSystem:
       minMaxState: 0
     randomizeRotationDirection: 0
     gravityModifier: 0
-    maxNumParticles: 1
+    maxNumParticles: 10
     size3D: 0
     rotation3D: 0
   ShapeModule:
@@ -716,7 +716,7 @@ ParticleSystem:
     serializedVersion: 2
     m_Type: 0
     rate:
-      scalar: 10
+      scalar: 20
       maxCurve:
         serializedVersion: 2
         m_Curve:

@@ -29,33 +29,33 @@ public class MenuScript : MonoBehaviour {
 	private bool menuIsActive;
 
 	void Start () {
-		Button menuBtn = Menu.GetComponent<Button>();
-		menuBtn.onClick.AddListener (MenuToggle);
+		//Button menuBtn = Menu.GetComponent<Button>();
+		//menuBtn.onClick.AddListener (MenuToggle);
 
-		Button eraseBtn = erase.GetComponent<Button>();
-		eraseBtn.onClick.AddListener (Erase);
+		//Button eraseBtn = erase.GetComponent<Button>();
+		//eraseBtn.onClick.AddListener (Erase);
 
-		BrushThicknessSlider.minValue = 0.0015f;
-		BrushThicknessSlider.maxValue = 0.004f;
+		//BrushThicknessSlider.minValue = 0.0015f;
+		//BrushThicknessSlider.maxValue = 0.004f;
 
-		Slider bts = BrushThicknessSlider.GetComponent<Slider> ();
-		bts.onValueChanged.AddListener (delegate {
-			ChooseThickness (bts);
-		});
+		//Slider bts = BrushThicknessSlider.GetComponent<Slider> ();
+		//bts.onValueChanged.AddListener (delegate {
+		//	ChooseThickness (bts);
+		//});
 
-		pinchDraw.DrawColor = Color.blue;
+		//pinchDraw.DrawColor = Color.blue;
 
-		Dropdown cdd = colorDD.GetComponent<Dropdown> ();
-		cdd.onValueChanged.AddListener (delegate {
-			ChooseColor(cdd);
-		});
+		//Dropdown cdd = colorDD.GetComponent<Dropdown> ();
+		//cdd.onValueChanged.AddListener (delegate {
+		//	ChooseColor(cdd);
+		//});
 
-		Dropdown sdd = stencilsDD.GetComponent<Dropdown> ();
-		sdd.onValueChanged.AddListener (delegate {
-			ChooseStencil(sdd);
-		});
+		//Dropdown sdd = stencilsDD.GetComponent<Dropdown> ();
+		//sdd.onValueChanged.AddListener (delegate {
+		//	ChooseStencil(sdd);
+		//});
 
-		menuIsActive = false;
+		//menuIsActive = false;
 	}
 
 	void ChooseThickness(Slider target)
