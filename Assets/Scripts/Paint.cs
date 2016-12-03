@@ -54,6 +54,8 @@ public class Paint : MonoBehaviour {
 			}
 			if (pd.DidRelease) {
                 paintLines [index].EndPaintLine ();
+                UnityEngine.ParticleSystem.EmissionModule em = fluids[fluids.Count - 1].GetComponent<ParticleSystem>().emission;
+                em.enabled = false;
 			}
 			if (pd.IsHolding) {
                 timeDelay += Time.deltaTime;
