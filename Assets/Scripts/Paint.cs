@@ -22,6 +22,11 @@ public class Paint : MonoBehaviour {
 	// Paint lines
 	private PaintLine[] paintLines;
 
+    // Fluid obj
+    public GameObject fluid;
+    public float timeDelay;
+    public float timeDelayMax;
+
 	void Awake() {
 		thickness = 0.0015f;
 		resolution = 3;
@@ -45,6 +50,17 @@ public class Paint : MonoBehaviour {
 				paintLines [index].EndPaintLine ();
 			}
 			if (pd.IsHolding) {
+
+                // Spawns fluid at point
+
+                timeDelay += Time.deltaTime;
+                if(timeDelay > timeDelayMax)
+                {
+                    Instantiate(fluid, pd.transform);
+                    timeDelay = 0.0f;
+                }
+
+
 				
 				paintLines [index].UpdatePaintLine (pd.Position);
 			}

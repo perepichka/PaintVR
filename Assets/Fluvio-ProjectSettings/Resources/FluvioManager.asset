@@ -24,7 +24,7 @@ MonoBehaviour:
   m_ThreadPriority: 2
   m_DesiredThreads: 8
   m_DesiredComputeAPI: 1
-  m_OpenCLDesiredDeviceType: 4
+  m_OpenCLDesiredDeviceType: 2
   m_EnableOpenCLGPUOnOSX: 0
   m_OpenCLPlatformBlacklist: []
   m_OpenCLDeviceBlacklist: []
