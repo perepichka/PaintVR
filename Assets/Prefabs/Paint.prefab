@@ -165,7 +165,7 @@ MonoBehaviour:
   m_FluidType: 0
   m_Dimensions: 0
   m_CullingType: 0
-  m_SmoothingDistance: 2
+  m_SmoothingDistance: 3
   m_ParticleMass: 7.625
   m_Density: 1012.44
   m_MinimumDensity: 499.145
@@ -278,7 +278,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010475433882}
   serializedVersion: 4
-  lengthInSec: 10
+  lengthInSec: 1000
   startDelay:
     scalar: 0
     maxCurve:
@@ -315,7 +315,7 @@ ParticleSystem:
       m_RotationOrder: 4
     minMaxState: 0
   speed: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   moveWithTransform: 0
@@ -487,7 +487,7 @@ ParticleSystem:
       maxColor: {r: 0.5294118, g: 0, b: 1, a: 1}
       minMaxState: 0
     startSize:
-      scalar: 20
+      scalar: 1.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -688,7 +688,7 @@ ParticleSystem:
       minMaxState: 0
     randomizeRotationDirection: 0
     gravityModifier: 0
-    maxNumParticles: 10
+    maxNumParticles: 3000
     size3D: 0
     rotation3D: 0
   ShapeModule:
@@ -716,7 +716,7 @@ ParticleSystem:
     serializedVersion: 2
     m_Type: 0
     rate:
-      scalar: 20
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2046,8 +2046,8 @@ ParticleSystemRenderer:
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 1
-  m_MinParticleSize: 0
-  m_MaxParticleSize: 0.5
+  m_MinParticleSize: 1.5
+  m_MaxParticleSize: 2
   m_CameraVelocityScale: 0
   m_VelocityScale: 0.02
   m_LengthScale: 1
