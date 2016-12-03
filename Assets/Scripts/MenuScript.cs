@@ -142,8 +142,11 @@ public class MenuScript : MonoBehaviour {
 	{
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{
-			if (GO.name == "Line Object")
-				Destroy (GO);
+			if (GO.name == "New Game Object") {
+				//GO.GetComponent<Rigidbody> ().useGravity = true;
+				GO.GetComponent<MeshCollider> ().convex = true;
+				// Destroy (GO);
+			}
 		}
 	}
 

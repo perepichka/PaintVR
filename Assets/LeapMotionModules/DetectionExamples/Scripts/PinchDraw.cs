@@ -130,6 +130,8 @@ namespace Leap.Unity.DetectionExamples {
         lineObj.transform.localScale = Vector3.one;
         lineObj.AddComponent<MeshFilter>().mesh = _mesh;
         lineObj.AddComponent<MeshRenderer>().sharedMaterial = _parent._material;
+				lineObj.AddComponent<MeshCollider> ().convex = true;
+				lineObj.AddComponent<Rigidbody> ().useGravity = false;
 
         return lineObj;
       }
