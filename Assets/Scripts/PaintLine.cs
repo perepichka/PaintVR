@@ -59,8 +59,8 @@ namespace PaintUtilities {
 		}
 
 		public void EndPaintLine () {
-			mesh.Optimize ();
-			mesh.UploadMeshData (true);
+			//mesh.Optimize ();
+			// mesh.UploadMeshData (true);
 		}
 
 		public void UpdatePaintLine(Vector3 position, float pinchStrength, float handSpeed) {
