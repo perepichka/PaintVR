@@ -26,7 +26,7 @@ public class Paint : MonoBehaviour {
 
 	void Awake() {
 		//thickness = 0.0015f;
-		resolution = 3;
+		//resolution = 3;
 	}
 
 	void Start() {
