@@ -94,17 +94,26 @@ public class Paint : MonoBehaviour {
 
         if ((nearest - point).magnitude > snapMax)
         {
+			//print((nearest - point).magnitude
+			//print ("Case A");
             print((nearest - point).magnitude);
-            print(snapMax);
             return obj.transform.TransformPoint(point);
         }
         // Maksym's algorithm. Calculate a point near the mesh close enough not to intersect and fuck up
-        Vector3 tempDist = point - nearest;
-        tempDist = Vector3.ClampMagnitude(tempDist, tempDist.magnitude - MAKSYM_CONSTANT);
-        nearest = point + tempDist;
+        //Vector3 tempDist = point - nearest;
+        //tempDist = Vector3.ClampMagnitude(tempDist, tempDist.magnitude - MAKSYM_CONSTANT);
+        //nearest = point + tempDist;
+        //Vector3 trans = obj.transform.TransformPoint(nearest);
 
-        Vector3 trans = obj.transform.TransformPoint(nearest);
-        print("Trans" + trans);
-        return trans;
+		print ("Case B");
+       // print("Trans" + trans);
+
+		Vector3 origTrans = obj.transform.TransformPoint (point);
+		Vector3 newTrans = obj.transform.TransformPoint (nearest);
+		print ("Orig:" + origTrans.x + " " + origTrans.y + " " + origTrans.z);
+		print ("New:" + newTrans.x + " " + newTrans.y + " " + newTrans.z);
+
+
+		return newTrans;
     }
 }
