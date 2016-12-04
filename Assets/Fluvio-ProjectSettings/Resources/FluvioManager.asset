@@ -21,7 +21,7 @@ MonoBehaviour:
   m_UseIndexGrid: 1
   m_MaxGridSize: 64
   m_GridBucketSize: 64
-  m_ThreadPriority: 2
+  m_ThreadPriority: 4
   m_DesiredThreads: 8
   m_DesiredComputeAPI: 1
   m_OpenCLDesiredDeviceType: 4

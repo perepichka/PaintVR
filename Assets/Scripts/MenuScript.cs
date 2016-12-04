@@ -145,10 +145,7 @@ public class MenuScript : MonoBehaviour {
 	{
         Paint script = GameObject.Find("Pinch Drawing").GetComponent<Paint>();
 
-        foreach(GameObject GO in script.fluids)
-        {
-            GO.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
-        }
+        script.fluid.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
 
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{

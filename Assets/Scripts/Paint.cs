@@ -23,10 +23,8 @@ public class Paint : MonoBehaviour {
 	private PaintLine[] paintLines;
 
     // Fluid obj
+    public GameObject fluidTemplate;
     public GameObject fluid;
-    public List<GameObject> fluids;
-    public float timeDelay;
-    public float timeDelayMax;
 
 	void Awake() {
 		thickness = 0.0015f;
@@ -34,6 +32,7 @@ public class Paint : MonoBehaviour {
 	}
 
 	void Start() {
+        fluid = null;
 		paintLines = new PaintLine[pinchDetectors.Length];
 		for (int i = 0; i < pinchDetectors.Length; i++) {
 			paintLines[i] = new PaintLine(this);
@@ -46,26 +45,37 @@ public class Paint : MonoBehaviour {
 		foreach (PinchDetector pd in pinchDetectors) {
 			if (pd.DidStartPinch) {
                 // Spawns fluid at point
-                fluids.Add(Instantiate(fluid));
+                if (!fluid)
+                {
+                    fluid = Instantiate(fluidTemplate);
+                }
+                else
+                {
+                    UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
+                    em.enabled = true;
+                }
                 Vector3 pos = pd.transform.position;
                 pos.y = -pos.y;
-                fluids[fluids.Count - 1].transform.position = pos;
+                fluid.transform.position = pos;
+                
+                // Line stuff
 				paintLines [index].InitPaintLine ();
 			}
 			if (pd.DidRelease) {
-                paintLines [index].EndPaintLine ();
-                UnityEngine.ParticleSystem.EmissionModule em = fluids[fluids.Count - 1].GetComponent<ParticleSystem>().emission;
+                // Fluid stuff
+                UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
                 em.enabled = false;
+                
+                // Line stuff
+                paintLines [index].EndPaintLine();
 			}
 			if (pd.IsHolding) {
-                timeDelay += Time.deltaTime;
-                //if (timeDelay > timeDelayMax)
-                //{
+                // Fluid stuff
                 Vector3 pos = pd.transform.position;
                 pos.y = -pos.y;
-                fluids[fluids.Count -1].transform.position = pos;
-                timeDelay = 0.0f;
-                //}
+                fluid.transform.position = pos;
+
+                // Line stuff
 				paintLines [index].UpdatePaintLine (pd.Position);
 			}
 		}

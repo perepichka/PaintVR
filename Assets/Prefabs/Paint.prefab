@@ -326,7 +326,7 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     startLifetime:
-      scalar: 10
+      scalar: 1000
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -695,7 +695,7 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     type: 8
-    radius: 0.4
+    radius: 1
     angle: 0
     length: 0.6897946
     boxX: 1
