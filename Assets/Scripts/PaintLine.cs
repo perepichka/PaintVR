@@ -28,6 +28,8 @@ namespace PaintUtilities {
 		public PaintLine (Paint parent) {
 			this.parent = parent;
 			position = new SmoothedVector3 ();
+			position.delay = 0.05f;
+			position.reset = true;
 			previousRings = new Vector3[2];
 			previousNormal = new Vector3 (0f, 0f, 0f);
 
@@ -48,8 +50,10 @@ namespace PaintUtilities {
 			mesh = new Mesh ();
 			rings = 0;
 
+			position.reset = true;
+
 			// Creates a new 
-			GameObject paintLine = new GameObject ();
+			GameObject paintLine = new GameObject ("PaintLineSegment");
 			paintLine.transform.position = new Vector3 (0f, 0f, 0f);
 			paintLine.transform.rotation = new Quaternion (0f, 0f, 0f, 1f);
 			paintLine.transform.localScale = new Vector3 (1f, 1f, 1f);
@@ -64,10 +68,9 @@ namespace PaintUtilities {
 		}
 
 		public void EndPaintLine () {
+			lastObject.AddComponent<MeshCollider> ().convex = false;
 			mesh.Optimize ();
 			mesh.UploadMeshData (true);
-			lastObject.
-			AddComponent<MeshCollider> ().convex = false;
 		}
 
 		public void UpdatePaintLine(Vector3 position, float pinchStrength, float handSpeed) {
@@ -160,7 +163,7 @@ namespace PaintUtilities {
 			for (int i = 0; i < parent.resolution; i++) {
 				float angle = 360.0f * (i / (float)(parent.resolution));
 				Quaternion rotator = Quaternion.AngleAxis(angle, direction);
-				Vector3 ringSpoke = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.2f, handSpeed)) * radiusScale;
+				Vector3 ringSpoke = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.15f, handSpeed)) * radiusScale;
 				vertices[offset + i] = position + ringSpoke;
 			}
 		}

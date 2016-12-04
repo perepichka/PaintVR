@@ -43,7 +43,7 @@ public class Paint : MonoBehaviour {
 			float strength = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PinchStrength : 0f;
 			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
 
-			if (pd.DidStartPinch) {
+			if (pd.DidStartHold) {
 				painting = true;
 				paintLines [index].InitPaintLine ();
 			}
@@ -53,7 +53,7 @@ public class Paint : MonoBehaviour {
 			}
 			if (pd.IsHolding) {
 				print (pd.hand.GetLeapHand ().PinchStrength);
-				paintLines [index].UpdatePaintLine (pd.Position, pd.hand.GetLeapHand().PinchStrength, speed);
+				paintLines [index].UpdatePaintLine (pd.Position, strength, speed);
 			}
 		}
 	}

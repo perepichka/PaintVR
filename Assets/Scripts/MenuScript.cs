@@ -25,7 +25,7 @@ public class MenuScript : MonoBehaviour {
 	public GameObject robot;
 
 	//Other variables
-	public PaintVR pinchDraw;
+	public Paint paint;
 	private bool menuIsActive;
 
 	void Start () {
@@ -35,15 +35,13 @@ public class MenuScript : MonoBehaviour {
 		Button eraseBtn = erase.GetComponent<Button>();
 		eraseBtn.onClick.AddListener (Erase);
 
-		BrushThicknessSlider.minValue = 0.0015f;
-		BrushThicknessSlider.maxValue = 0.004f;
+		BrushThicknessSlider.minValue = 0.005f;
+		BrushThicknessSlider.maxValue = 0.03f;
 
 		Slider bts = BrushThicknessSlider.GetComponent<Slider> ();
 		bts.onValueChanged.AddListener (delegate {
 			ChooseThickness (bts);
 		});
-
-		pinchDraw.DrawColor = Color.blue;
 
 		Dropdown cdd = colorDD.GetComponent<Dropdown> ();
 		cdd.onValueChanged.AddListener (delegate {
@@ -60,7 +58,7 @@ public class MenuScript : MonoBehaviour {
 
 	void ChooseThickness(Slider target)
 	{
-		pinchDraw.DrawRadius = target.value;
+		paint.thickness = target.value;
 	}
 
 	void MenuToggle(){
@@ -121,19 +119,19 @@ public class MenuScript : MonoBehaviour {
 	private void ChooseColor(Dropdown target) {
 		switch (target.value) {
 		case 0:
-			pinchDraw.DrawColor = Color.blue;
+			//paint.DrawColor = Color.blue;
 			break;
 		case 1:
-			pinchDraw.DrawColor = Color.red;
+			//paint.DrawColor = Color.red;
 			break;
 		case 2:
-			pinchDraw.DrawColor = Color.green;
+			//paint.DrawColor = Color.green;
 			break;
 		case 3:
-			pinchDraw.DrawColor = Color.yellow;
+			//paint.DrawColor = Color.yellow;
 			break;
 		default:
-			pinchDraw.DrawColor = Color.blue;
+			//paint.DrawColor = Color.blue;
 			break;
 		}
 	}
@@ -142,10 +140,10 @@ public class MenuScript : MonoBehaviour {
 	{
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{
-			if (GO.name == "New Game Object") {
+			if (GO.name == "PaintLineSegment") {
 				//GO.GetComponent<Rigidbody> ().useGravity = true;
-				GO.GetComponent<MeshCollider> ().convex = true;
-				// Destroy (GO);
+				//GO.GetComponent<MeshCollider> ().convex = true;
+				Destroy (GO);
 			}
 		}
 	}
