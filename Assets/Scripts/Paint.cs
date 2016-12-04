@@ -44,17 +44,17 @@ public class Paint : MonoBehaviour {
 			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
 
 			if (pd.DidStartHold) {
-				painting = true;
 				paintLines [index].InitPaintLine ();
 			}
 			if (pd.DidRelease) {
-				painting = false;
 				paintLines [index].EndPaintLine ();
 			}
 			if (pd.IsHolding) {
 				print (pd.hand.GetLeapHand ().PinchStrength);
 				paintLines [index].UpdatePaintLine (pd.Position, strength, speed);
 			}
+
+			index++;
 		}
 	}
 }
