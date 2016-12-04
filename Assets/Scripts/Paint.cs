@@ -54,7 +54,7 @@ public class Paint : MonoBehaviour {
                 em.enabled = true;
                 //}
                 Vector3 pos = pd.transform.position;
-                pos.y = -pos.y;
+                //pos.y = -pos.y;
                 fluid.transform.position = pos;
                 
                 // Line stuff
@@ -71,7 +71,7 @@ public class Paint : MonoBehaviour {
 			if (pd.IsHolding) {
                 // Fluid stuff
                 Vector3 pos = pd.transform.position;
-                pos.y = -pos.y;
+                //pos.y = -pos.y;
                 fluid.transform.position = pos;
 
                 // Line stuff
