@@ -146,6 +146,8 @@ public class MenuScript : MonoBehaviour {
         Paint script = GameObject.Find("Pinch Drawing").GetComponent<Paint>();
 
         script.fluid.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+        UnityEngine.ParticleSystem.CollisionModule mod = script.fluid.GetComponent<ParticleSystem>().collision;
+        mod.enabled = true;
 
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{

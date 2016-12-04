@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: mgpPaint
-  m_Shader: {fileID: 4800000, guid: d5fe39a306376441dafacc1b9cef29fa, type: 3}
+  m_Shader: {fileID: 4800000, guid: 386e509166890054c8c522e929089d76, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _NORMALMAP _VERTEXCOLORMODE_ALBEDO
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -37,6 +37,12 @@ Material:
         name: _MainTex
       second:
         m_Texture: {fileID: 2800000, guid: 1f9d0a4343fab4e21a278b8add2a14b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MetallicGlossMap
+      second:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -88,6 +94,9 @@ Material:
     - first:
         name: _InvFade
       second: 1
+    - first:
+        name: _Metallic
+      second: 0.8
     - first:
         name: _Power
       second: 1

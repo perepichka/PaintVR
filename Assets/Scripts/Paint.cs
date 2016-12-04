@@ -23,7 +23,7 @@ public class Paint : MonoBehaviour {
 	private PaintLine[] paintLines;
 
     // Fluid obj
-    public GameObject fluidTemplate;
+    //public GameObject fluidTemplate;
     public GameObject fluid;
 
 	void Awake() {
@@ -32,7 +32,6 @@ public class Paint : MonoBehaviour {
 	}
 
 	void Start() {
-        fluid = null;
 		paintLines = new PaintLine[pinchDetectors.Length];
 		for (int i = 0; i < pinchDetectors.Length; i++) {
 			paintLines[i] = new PaintLine(this);
@@ -45,15 +44,15 @@ public class Paint : MonoBehaviour {
 		foreach (PinchDetector pd in pinchDetectors) {
 			if (pd.DidStartPinch) {
                 // Spawns fluid at point
-                if (!fluid)
-                {
-                    fluid = Instantiate(fluidTemplate);
-                }
-                else
-                {
-                    UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
-                    em.enabled = true;
-                }
+                //if (!fluid)
+                //{
+                //    fluid = Instantiate(fluidTemplate);
+                //}
+                //else
+                //{
+                UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
+                em.enabled = true;
+                //}
                 Vector3 pos = pd.transform.position;
                 pos.y = -pos.y;
                 fluid.transform.position = pos;
