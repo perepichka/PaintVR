@@ -43,7 +43,7 @@ public class MenuScript : MonoBehaviour {
 			ChooseThickness (bts);
 		});
 
-		pinchDraw.DrawColor = Color.blue;
+		//pinchDraw.DrawColor = Color.blue;
 
 		Dropdown cdd = colorDD.GetComponent<Dropdown> ();
 		cdd.onValueChanged.AddListener (delegate {
@@ -84,30 +84,35 @@ public class MenuScript : MonoBehaviour {
 	private void ChooseStencil(Dropdown target) {
 		switch (target.value) {
 		case 0:
+            GameObject.Find("Pinch Drawing").GetComponent<Paint>().stencil = null;
 			cube.SetActive (false);
 			star.SetActive (false);
 			teapot.SetActive (false);
 			robot.SetActive (false);
 			break;
 		case 1:
+            GameObject.Find("Pinch Drawing").GetComponent<Paint>().stencil = cube;
 			cube.SetActive (true);
 			star.SetActive (false);
 			teapot.SetActive (false);
 			robot.SetActive (false);
 			break;
 		case 2:
+            GameObject.Find("Pinch Drawing").GetComponent<Paint>().stencil = star;
 			cube.SetActive (false);
 			star.SetActive (true);
 			teapot.SetActive (false);
 			robot.SetActive (false);
 			break;
 		case 3:
+            GameObject.Find("Pinch Drawing").GetComponent<Paint>().stencil = teapot;
 			cube.SetActive (false);
 			star.SetActive (false);
 			teapot.SetActive (true);
 			robot.SetActive (false);
 			break;
 		case 4:
+            GameObject.Find("Pinch Drawing").GetComponent<Paint>().stencil = robot;
 			cube.SetActive (false);
 			star.SetActive (false);
 			teapot.SetActive (false);
