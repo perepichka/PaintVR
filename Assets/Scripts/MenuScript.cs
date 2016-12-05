@@ -13,6 +13,7 @@ public class MenuScript : MonoBehaviour {
 	public GameObject BrushThickness;
 	public Slider BrushThicknessSlider;
 	public GameObject BrushType;
+	public Dropdown brushTypeDD;
 	public GameObject ColorSelector;
 	public Dropdown colorDD;
 	public GameObject erase;
@@ -50,6 +51,11 @@ public class MenuScript : MonoBehaviour {
 		Dropdown cdd = colorDD.GetComponent<Dropdown> ();
 		cdd.onValueChanged.AddListener (delegate {
 			ChooseColor(cdd);
+		});
+
+		Dropdown btdd = brushTypeDD.GetComponent<Dropdown> ();
+		btdd.onValueChanged.AddListener (delegate {
+			ChooseBrushType(btdd);
 		});
 
         Dropdown sdd = stencilsDD.GetComponent<Dropdown>();
@@ -136,29 +142,41 @@ public class MenuScript : MonoBehaviour {
 		}
 	}
 
+	private void ChooseBrushType(Dropdown target) {
+		paint.materialIndex = target.value % 2;
+		paint.fluidEnabled = target.value == 2;
+		print (target.value);
+	}
+		
 	private void ChooseColor(Dropdown target) {
+		Color currentColor = Color.white;
 		switch (target.value) {
 		case 0:
-			paint.materials [0].color = Color.green;
+			currentColor = Color.green;
 			break;
 		case 1:
-			paint.materials [0].color = Color.red;
+			currentColor = Color.red;
 			break;
 		case 2:
-			paint.materials [0].color = Color.blue;
+			currentColor = Color.blue;
 			break;
 		case 3:
-			paint.materials [0].color = Color.yellow;
+			currentColor = Color.yellow;
 			break;
 		default:
 			break;
+		}
+		for (int i = 0; i < paint.paintLines.Length; i++) {
+			for (int j = 0; j < paint.paintLines[i].copyMaterials.Length; j++) {
+				paint.paintLines [i].copyMaterials [j].color = currentColor;
+			}
 		}
 	}
 
 	void Erase()
 	{
 		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
-		if (script.fluidEnabled) script.resetFluid ();
+		script.resetFluid ();
 
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{

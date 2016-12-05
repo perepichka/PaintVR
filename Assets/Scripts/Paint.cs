@@ -13,6 +13,7 @@ public class Paint : MonoBehaviour {
 
 	// Paint material / shader
 	public Material[] materials;
+	public int materialIndex;
 
 	// Paint line thickness
 	public float thickness;
@@ -21,7 +22,7 @@ public class Paint : MonoBehaviour {
 	public int resolution;
 
 	// Paint lines
-	private PaintLine[] paintLines;
+	public PaintLine[] paintLines;
 
     // Stencil stuff
     public GameObject stencil;
@@ -39,15 +40,14 @@ public class Paint : MonoBehaviour {
 	public bool fluidEnabled;
 
 	void Awake() {
-		//thickness = 0.0015f;
-		//resolution = 3;
+		
 	}
 
 	void Start() {
         stencil = null;
 		snapping = false;
 		fluidEnabled = false;
-		materials [0].color = Color.green;
+		materialIndex = 0;
 		paintLines = new PaintLine[pinchDetectors.Length];
 		for (int i = 0; i < pinchDetectors.Length; i++) {
 			paintLines[i] = new PaintLine(this);
@@ -202,7 +202,7 @@ public class Paint : MonoBehaviour {
 	}
 
 	public void changeMaterial () {
-        changeFluid();
+        //changeFluid();
 	}
 
     public void changeFluid()

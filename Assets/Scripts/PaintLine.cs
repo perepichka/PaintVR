@@ -24,9 +24,15 @@ namespace PaintUtilities {
 		private float handSpeed = 0f;
 
 		private GameObject lastObject;
+		public Material[] copyMaterials;
 
 		public PaintLine (Paint parent) {
 			this.parent = parent;
+			copyMaterials = new Material[parent.materials.Length];
+			for (int i = 0; i < copyMaterials.Length; i++) {
+				copyMaterials [i] = new Material (parent.materials [i].shader);
+				copyMaterials [i].CopyPropertiesFromMaterial (parent.materials [i]);
+			}
 			position = new SmoothedVector3 ();
 			position.delay = 0.05f;
 			position.reset = true;
@@ -58,19 +64,16 @@ namespace PaintUtilities {
 			paintLine.transform.rotation = new Quaternion (0f, 0f, 0f, 1f);
 			paintLine.transform.localScale = new Vector3 (1f, 1f, 1f);
 
-			Material copy = new Material (parent.materials [0].shader);
-			copy.CopyPropertiesFromMaterial (parent.materials [0]);
+			Material copy = new Material (copyMaterials[parent.materialIndex].shader);
+			copy.CopyPropertiesFromMaterial (copyMaterials[parent.materialIndex]);
 			paintLine.AddComponent<MeshRenderer> ().sharedMaterial = copy;
 			paintLine.AddComponent<MeshFilter> ().mesh = mesh;
 			paintLine.AddComponent<Rigidbody> ().useGravity = false;
-			//paintLine.AddComponent<MeshCollider> ().convex = true;
-			// paintLine.GetComponent<MeshCollider> ().sharedMesh = mesh;
 			lastObject = paintLine;
 			return paintLine;
 		}
 
 		public void EndPaintLine () {
-			//lastObject.AddComponent<MeshCollider> ().convex = false;
 			mesh.Optimize ();
 			mesh.UploadMeshData (true);
 		}
@@ -116,17 +119,17 @@ namespace PaintUtilities {
 
 			if (rings == 2) {
 				updateRingVertices(0, previousRings[0], position - previousRings[1],
-					previousNormal, 0);
+					previousNormal);
 			}
 
 			if (rings >= 2) {
 				updateRingVertices(vertices.Count - parent.resolution, position,
-					position - previousRings[0], normal, 0);
+					position - previousRings[0], normal);
 				updateRingVertices(vertices.Count - parent.resolution * 2,
-					position, position - previousRings[0], normal, 1);
+					position, position - previousRings[0], normal);
 				updateRingVertices(vertices.Count - parent.resolution * 3,
 					previousRings[0], position - previousRings[1],
-					previousNormal, 1);
+					previousNormal);
 			}
 
 			previousRings[1] = previousRings[0];
@@ -158,15 +161,15 @@ namespace PaintUtilities {
 			}
 		}
 
-		private void updateRingVertices(int offset, Vector3 position, Vector3 direction, Vector3 normal, float radiusScale) {
+		private void updateRingVertices(int offset, Vector3 position, Vector3 direction, Vector3 normal) {
 			direction = direction.normalized;
 			normal = normal.normalized;
 
 			for (int i = 0; i < parent.resolution; i++) {
 				float angle = 360.0f * (i / (float)(parent.resolution));
 				Quaternion rotator = Quaternion.AngleAxis(angle, direction);
-				Vector3 ringSpoke = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.15f, handSpeed)) * radiusScale;
-				vertices[offset + i] = position + ringSpoke;
+				Vector3 ringVertex = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.15f, handSpeed));
+				vertices[offset + i] = position + ringVertex;
 			}
 		}
 	}
