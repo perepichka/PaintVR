@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Leap.Unity;
 using PaintUtilities;
+using UnityEngine.UI;
 
 public class Paint : MonoBehaviour {
 
@@ -32,6 +33,9 @@ public class Paint : MonoBehaviour {
     // Fluid obj
     public GameObject fluidTemplate;
     public GameObject fluid;
+
+    public GameObject fluid1;
+    public GameObject fluid2;
 	public bool fluidEnabled;
 
 	void Awake() {
@@ -54,6 +58,14 @@ public class Paint : MonoBehaviour {
 		// Update each pinch detector (one per hand)
 		int index = 0;
 		foreach (PinchDetector pd in pinchDetectors) {
+
+            if (index == 0)
+            {
+                fluid = fluid1;
+            } else
+            {
+                fluid = fluid2;
+            }
 
 			float strength = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PinchStrength : 0f;
 			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
@@ -92,10 +104,20 @@ public class Paint : MonoBehaviour {
 			}
 			if (pd.IsHolding) {
 				if (fluidEnabled) {
-					// Fluid stuff
-					Vector3 pos = pd.transform.position;
-					pos.y = -pos.y;
-					fluid.transform.position = pos;
+                    // Fluid stuff
+                    if (stencil == null || stencil.name == "Robot Kyle" || !snapping)
+                    {
+                        Vector3 pos = pd.transform.position;
+                        pos.y = -pos.y;
+                        fluid.transform.position = pos;
+                    } else
+                    {
+                        Vector3 nearest = NearestVertexTo(pd.Position, stencil);
+
+                        //Vector3 pos = pd.transform.position;
+                        //pos.y = -pos.y;
+                        fluid.transform.position = nearest;
+                    }
 				} else {
 					// Line stuff
 					if (stencil == null || stencil.name == "Robot Kyle" || !snapping)
@@ -103,10 +125,6 @@ public class Paint : MonoBehaviour {
 						paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
 					} else
 					{
-						//Vector3 nearest = NearestVertexTo(pd.Position, stencil);
-						//print(pd.Position.x + " " + pd.Position.y + " " + pd.Position.z);
-						//print(nearest.x + " " + nearest.y + " " + nearest.z);
-
 						paintLines[index].UpdatePaintLine(NearestVertexTo(pd.Position, stencil), strength, speed);
 					}
 				}
@@ -118,11 +136,14 @@ public class Paint : MonoBehaviour {
     // @TODO Refactor or cite http://answers.unity3d.com/questions/7788/closest-point-on-mesh-collider.html
     public Vector3 NearestVertexTo(Vector3 point, GameObject obj)
     {
-        point = obj.transform.InverseTransformPoint(point);
-
-        Mesh m = obj.GetComponentInChildren<MeshFilter>().mesh;
         float minDist = Mathf.Infinity;
+        //print("T1" + point.x + " " + point.y + " " + point.z);
+        point = obj.transform.InverseTransformPoint(point);
+        //print("T2" + point.x + " " + point.y + " " + point.z);
+        Mesh m = obj.GetComponent<MeshFilter>().mesh;
         Vector3 nearest = Vector3.zero;
+
+        print("Count" + m.vertices.Length);
 
         foreach(Vector3 v in m.vertices)
         {
@@ -131,16 +152,14 @@ public class Paint : MonoBehaviour {
 
             if (dist < minDist)
             {
-                minDist = dist;
                 nearest = v;
+                minDist = dist;
+                print(v);
             }
         }
 
         if ((nearest - point).magnitude > snapMax)
         {
-			//print((nearest - point).magnitude
-			//print ("Case A");
-            print((nearest - point).magnitude);
             return obj.transform.TransformPoint(point);
         }
         // Maksym's algorithm. Calculate a point near the mesh close enough not to intersect and fuck up
@@ -150,24 +169,42 @@ public class Paint : MonoBehaviour {
         //Vector3 trans = obj.transform.TransformPoint(nearest);
 
 		print ("Case B");
-       // print("Trans" + trans);
 
 		Vector3 origTrans = obj.transform.TransformPoint (point);
 		Vector3 newTrans = obj.transform.TransformPoint (nearest);
 		print ("Orig:" + origTrans.x + " " + origTrans.y + " " + origTrans.z);
 		print ("New:" + newTrans.x + " " + newTrans.y + " " + newTrans.z);
 
-
+        print("Finished");
 		return newTrans;
     }
 
 	public void resetFluid () {
-		if (fluid.GetComponent<ParticleSystem> ().particleCount != 0) {
-			fluid.GetComponent<ParticleSystem> ().Clear();
+		if (fluid1.GetComponent<ParticleSystem> ().particleCount != 0) {
+			fluid1.GetComponent<ParticleSystem> ().Clear();
+		}
+		if (fluid2.GetComponent<ParticleSystem> ().particleCount != 0) {
+			fluid2.GetComponent<ParticleSystem> ().Clear();
 		}
 	}
 
 	public void changeMaterial () {
-		fluidEnabled = !fluidEnabled;
+        changeFluid();
 	}
+
+    public void changeFluid()
+    {
+        // Changing fluid status
+		fluidEnabled = !fluidEnabled;
+
+        if (fluidEnabled)
+        {
+            // If fluid is disabled, disable checkbox as well
+            snapping = false;
+            GameObject.Find("Snap").GetComponent<Toggle>().isOn = false;
+        }
+
+        GameObject.Find("Snap").GetComponent<Toggle>().interactable = !GameObject.Find("Snap").GetComponent<Toggle>().interactable;
+
+    }
 }

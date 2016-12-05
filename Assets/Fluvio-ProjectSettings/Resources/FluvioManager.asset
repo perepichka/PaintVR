@@ -23,7 +23,7 @@ MonoBehaviour:
   m_GridBucketSize: 64
   m_ThreadPriority: 2
   m_DesiredThreads: 8
-  m_DesiredComputeAPI: 1
+  m_DesiredComputeAPI: 2
   m_OpenCLDesiredDeviceType: 4
   m_EnableOpenCLGPUOnOSX: 0
   m_OpenCLPlatformBlacklist: []

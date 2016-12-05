@@ -70,7 +70,7 @@ namespace PaintUtilities {
 		}
 
 		public void EndPaintLine () {
-			lastObject.AddComponent<MeshCollider> ().convex = false;
+			//lastObject.AddComponent<MeshCollider> ().convex = false;
 			mesh.Optimize ();
 			mesh.UploadMeshData (true);
 		}

@@ -168,9 +168,12 @@ public class MenuScript : MonoBehaviour {
 	{
 		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
 
-		script.fluid.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
-		UnityEngine.ParticleSystem.CollisionModule mod = script.fluid.GetComponent<ParticleSystem>().collision;
+		script.fluid1.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+		script.fluid2.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+		UnityEngine.ParticleSystem.CollisionModule mod = script.fluid1.GetComponent<ParticleSystem>().collision;
 		mod.enabled = true;
+		UnityEngine.ParticleSystem.CollisionModule mod2 = script.fluid2.GetComponent<ParticleSystem>().collision;
+		mod2.enabled = true;
 	}
 
 	public void Snap (){
