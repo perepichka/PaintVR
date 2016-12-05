@@ -133,19 +133,18 @@ public class MenuScript : MonoBehaviour {
 	private void ChooseColor(Dropdown target) {
 		switch (target.value) {
 		case 0:
-			//paint.DrawColor = Color.blue;
+			paint.materials [0].color = Color.green;
 			break;
 		case 1:
-			//paint.DrawColor = Color.red;
+			paint.materials [0].color = Color.red;
 			break;
 		case 2:
-			//paint.DrawColor = Color.green;
+			paint.materials [0].color = Color.blue;
 			break;
 		case 3:
-			//paint.DrawColor = Color.yellow;
+			paint.materials [0].color = Color.yellow;
 			break;
 		default:
-			//paint.DrawColor = Color.blue;
 			break;
 		}
 	}
@@ -153,7 +152,7 @@ public class MenuScript : MonoBehaviour {
 	void Erase()
 	{
 		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
-		script.resetFluid ();
+		if (script.fluidEnabled) script.resetFluid ();
 
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{

@@ -32,6 +32,7 @@ public class Paint : MonoBehaviour {
     // Fluid obj
     public GameObject fluidTemplate;
     public GameObject fluid;
+	public bool fluidEnabled;
 
 	void Awake() {
 		//thickness = 0.0015f;
@@ -41,6 +42,8 @@ public class Paint : MonoBehaviour {
 	void Start() {
         stencil = null;
 		snapping = false;
+		fluidEnabled = false;
+		materials [0].color = Color.green;
 		paintLines = new PaintLine[pinchDetectors.Length];
 		for (int i = 0; i < pinchDetectors.Length; i++) {
 			paintLines[i] = new PaintLine(this);
@@ -56,55 +59,58 @@ public class Paint : MonoBehaviour {
 			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
 
 			if (pd.DidStartHold) {
-                // Spawns fluid at point
-                UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
-                em.enabled = true;
+				if (fluidEnabled) {
+					// Spawns fluid at point
+					UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem> ().emission;
+					em.enabled = true;
 
-				// Disable fluid collision
-				UnityEngine.ParticleSystem.CollisionModule mod = fluid.GetComponent<ParticleSystem>().collision;
-				mod.enabled = false;
+					// Disable fluid collision
+					UnityEngine.ParticleSystem.CollisionModule mod = fluid.GetComponent<ParticleSystem> ().collision;
+					mod.enabled = false;
 
-				// Disable fluid gravity
-				fluid.GetComponent<ParticleSystem>().gravityModifier = 0.0f;
-                
-                Vector3 pos = pd.transform.position;
-                pos.y = -pos.y;
-                fluid.transform.position = pos;
-                
-                // Line stuff
-				paintLines [index].InitPaintLine ();
+					// Disable fluid gravity
+					fluid.GetComponent<ParticleSystem> ().gravityModifier = 0.0f;
+	                
+					Vector3 pos = pd.transform.position;
+					pos.y = -pos.y;
+					fluid.transform.position = pos;
+				} else {
+					// Line stuff
+					paintLines [index].InitPaintLine ();
+				}
 			}
 			if (pd.DidRelease) {
 
                 // Fluid stuff
-                UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
-                em.enabled = false;
-                
-                // Line stuff
-                paintLines [index].EndPaintLine();
+				if (fluidEnabled) {
+					UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem> ().emission;
+					em.enabled = false;
+				} else {
+					// Line stuff
+					paintLines [index].EndPaintLine();
+				}
 			}
 			if (pd.IsHolding) {
+				if (fluidEnabled) {
+					// Fluid stuff
+					Vector3 pos = pd.transform.position;
+					pos.y = -pos.y;
+					fluid.transform.position = pos;
+				} else {
+					// Line stuff
+					if (stencil == null || stencil.name == "Robot Kyle" || !snapping)
+					{
+						paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
+					} else
+					{
+						//Vector3 nearest = NearestVertexTo(pd.Position, stencil);
+						//print(pd.Position.x + " " + pd.Position.y + " " + pd.Position.z);
+						//print(nearest.x + " " + nearest.y + " " + nearest.z);
 
-				if (stencil == null || stencil.name == "Robot Kyle" || !snapping)
-				{
-					paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
-				} else
-				{
-					//Vector3 nearest = NearestVertexTo(pd.Position, stencil);
-					//print(pd.Position.x + " " + pd.Position.y + " " + pd.Position.z);
-					//print(nearest.x + " " + nearest.y + " " + nearest.z);
-
-					paintLines[index].UpdatePaintLine(NearestVertexTo(pd.Position, stencil), strength, speed);
+						paintLines[index].UpdatePaintLine(NearestVertexTo(pd.Position, stencil), strength, speed);
+					}
 				}
-
-                // Fluid stuff
-                Vector3 pos = pd.transform.position;
-                pos.y = -pos.y;
-                fluid.transform.position = pos;
-
-
 			}
-
 			index++;
 		}
 	}
@@ -155,8 +161,13 @@ public class Paint : MonoBehaviour {
 		return newTrans;
     }
 
-	public void resetFluid(){
-		Destroy (fluid);
-		fluid = Instantiate (fluidTemplate);
+	public void resetFluid () {
+		if (fluid.GetComponent<ParticleSystem> ().particleCount != 0) {
+			fluid.GetComponent<ParticleSystem> ().Clear();
+		}
+	}
+
+	public void changeMaterial () {
+		fluidEnabled = !fluidEnabled;
 	}
 }

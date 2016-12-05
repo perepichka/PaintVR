@@ -58,7 +58,9 @@ namespace PaintUtilities {
 			paintLine.transform.rotation = new Quaternion (0f, 0f, 0f, 1f);
 			paintLine.transform.localScale = new Vector3 (1f, 1f, 1f);
 
-			paintLine.AddComponent<MeshRenderer> ().sharedMaterial = parent.materials [0];
+			Material copy = new Material (parent.materials [0].shader);
+			copy.CopyPropertiesFromMaterial (parent.materials [0]);
+			paintLine.AddComponent<MeshRenderer> ().sharedMaterial = copy;
 			paintLine.AddComponent<MeshFilter> ().mesh = mesh;
 			paintLine.AddComponent<Rigidbody> ().useGravity = false;
 			//paintLine.AddComponent<MeshCollider> ().convex = true;
