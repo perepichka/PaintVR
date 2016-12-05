@@ -28,6 +28,10 @@ public class Paint : MonoBehaviour {
 
     private float MAKSYM_CONSTANT = 0.1f;
 
+    // Fluid obj
+    public GameObject fluidTemplate;
+    public GameObject fluid;
+
 	void Awake() {
 		//thickness = 0.0015f;
 		//resolution = 3;
@@ -45,17 +49,41 @@ public class Paint : MonoBehaviour {
 		// Update each pinch detector (one per hand)
 		int index = 0;
 		foreach (PinchDetector pd in pinchDetectors) {
+
 			float strength = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PinchStrength : 0f;
 			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
 
 			if (pd.DidStartHold) {
+                // Spawns fluid at point
+                UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
+                em.enabled = true;
+
+				// Disable fluid collision
+				UnityEngine.ParticleSystem.CollisionModule mod = fluid.GetComponent<ParticleSystem>().collision;
+				mod.enabled = false;
+
+				// Disable fluid gravity
+				fluid.GetComponent<ParticleSystem>().gravityModifier = 0.0f;
+                
+                Vector3 pos = pd.transform.position;
+                pos.y = -pos.y;
+                fluid.transform.position = pos;
+                
+                // Line stuff
 				paintLines [index].InitPaintLine ();
 			}
 			if (pd.DidRelease) {
-				paintLines [index].EndPaintLine ();
+
+                // Fluid stuff
+                UnityEngine.ParticleSystem.EmissionModule em = fluid.GetComponent<ParticleSystem>().emission;
+                em.enabled = false;
+                
+                // Line stuff
+                paintLines [index].EndPaintLine();
 			}
 			if (pd.IsHolding) {
-				if (stencil == null)
+
+				if (stencil == null || stencil.name == "Robot Kyle")
 				{
 					paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
 				} else
@@ -66,6 +94,13 @@ public class Paint : MonoBehaviour {
 
 					paintLines[index].UpdatePaintLine(NearestVertexTo(pd.Position, stencil), strength, speed);
 				}
+
+                // Fluid stuff
+                Vector3 pos = pd.transform.position;
+                pos.y = -pos.y;
+                fluid.transform.position = pos;
+
+
 			}
 
 			index++;
@@ -117,4 +152,9 @@ public class Paint : MonoBehaviour {
 
 		return newTrans;
     }
+
+	public void resetFluid(){
+		Destroy (fluid);
+		fluid = Instantiate (fluidTemplate);
+	}
 }

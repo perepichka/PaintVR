@@ -16,7 +16,7 @@ public class MenuScript : MonoBehaviour {
 	public GameObject ColorSelector;
 	public Dropdown colorDD;
 	public GameObject erase;
-	public Button EraseButton;
+	public GameObject gravity;
 
 	//Stencil variables
 	public GameObject cube;
@@ -29,11 +29,14 @@ public class MenuScript : MonoBehaviour {
 	private bool menuIsActive;
 
 	void Start () {
-		Button menuBtn = Menu.GetComponent<Button>();
-		menuBtn.onClick.AddListener (MenuToggle);
+        Button menuBtn = Menu.GetComponent<Button>();
+        menuBtn.onClick.AddListener(MenuToggle);
 
-		Button eraseBtn = erase.GetComponent<Button>();
-		eraseBtn.onClick.AddListener (Erase);
+        Button eraseBtn = erase.GetComponent<Button>();
+        eraseBtn.onClick.AddListener(Erase);
+
+		Button gravityBtn = gravity.GetComponent<Button>();
+		gravityBtn.onClick.AddListener(Gravity);
 
 		BrushThicknessSlider.minValue = 0.005f;
 		BrushThicknessSlider.maxValue = 0.03f;
@@ -48,13 +51,14 @@ public class MenuScript : MonoBehaviour {
 			ChooseColor(cdd);
 		});
 
-		Dropdown sdd = stencilsDD.GetComponent<Dropdown> ();
-		sdd.onValueChanged.AddListener (delegate {
-			ChooseStencil(sdd);
-		});
+        Dropdown sdd = stencilsDD.GetComponent<Dropdown>();
+        sdd.onValueChanged.AddListener(delegate
+        {
+            ChooseStencil(sdd);
+        });
 
-		menuIsActive = false;
-	}
+        menuIsActive = false;
+    }
 
 	void ChooseThickness(Slider target)
 	{
@@ -68,6 +72,7 @@ public class MenuScript : MonoBehaviour {
 			BrushType.SetActive (true);
 			ColorSelector.SetActive (true);
 			erase.SetActive (true);
+			gravity.SetActive (true);
 			menuIsActive = true;
 		} else {
 			Stencils.SetActive (false);
@@ -75,6 +80,7 @@ public class MenuScript : MonoBehaviour {
 			BrushType.SetActive (false);
 			ColorSelector.SetActive (false);
 			erase.SetActive (false);
+			gravity.SetActive (false);
 			menuIsActive = false;
 		}
 	}
@@ -143,6 +149,9 @@ public class MenuScript : MonoBehaviour {
 
 	void Erase()
 	{
+		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
+		script.resetFluid ();
+
 		foreach(GameObject GO in GameObject.FindObjectsOfType(typeof(GameObject)))
 		{
 			if (GO.name == "PaintLineSegment") {
@@ -153,4 +162,12 @@ public class MenuScript : MonoBehaviour {
 		}
 	}
 
+	void Gravity()
+	{
+		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
+
+		script.fluid.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+		UnityEngine.ParticleSystem.CollisionModule mod = script.fluid.GetComponent<ParticleSystem>().collision;
+		mod.enabled = true;
+	}
 }
