@@ -58,7 +58,8 @@ public class Paint : MonoBehaviour {
 		// Update each pinch detector (one per hand)
 		int index = 0;
 		foreach (PinchDetector pd in pinchDetectors) {
-
+            
+            // Sets the fluid to the currently looped on fluid (mainly to save time refactoring code for the multi-hand support added)
             if (index == 0)
             {
                 fluid = fluid1;
@@ -67,6 +68,10 @@ public class Paint : MonoBehaviour {
                 fluid = fluid2;
             }
 
+            // Updates the fluids color based on user selection
+            updateFluidColor();
+
+            // Logic for painting
 			float strength = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PinchStrength : 0f;
 			float speed = pd.hand.GetLeapHand () != null ? pd.hand.GetLeapHand ().PalmVelocity.Magnitude : 0f;
 
@@ -112,10 +117,9 @@ public class Paint : MonoBehaviour {
                         fluid.transform.position = pos;
                     } else
                     {
-                        Vector3 nearest = NearestVertexTo(pd.Position, stencil);
-
-                        //Vector3 pos = pd.transform.position;
-                        //pos.y = -pos.y;
+                        Vector3 pos = pd.transform.position;
+                        pos.y = -pos.y;
+                        Vector3 nearest = NearestPointTo(pos, stencil);
                         fluid.transform.position = nearest;
                     }
 				} else {
@@ -125,7 +129,7 @@ public class Paint : MonoBehaviour {
 						paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
 					} else
 					{
-						paintLines[index].UpdatePaintLine(NearestVertexTo(pd.Position, stencil), strength, speed);
+						paintLines[index].UpdatePaintLine(NearestPointTo(pd.Position, stencil), strength, speed);
 					}
 				}
 			}
@@ -133,28 +137,26 @@ public class Paint : MonoBehaviour {
 		}
 	}
 
-    // @TODO Refactor or cite http://answers.unity3d.com/questions/7788/closest-point-on-mesh-collider.html
     public Vector3 NearestVertexTo(Vector3 point, GameObject obj)
     {
-        float minDist = Mathf.Infinity;
+        float minDist = -1;
         //print("T1" + point.x + " " + point.y + " " + point.z);
         point = obj.transform.InverseTransformPoint(point);
         //print("T2" + point.x + " " + point.y + " " + point.z);
         Mesh m = obj.GetComponent<MeshFilter>().mesh;
         Vector3 nearest = Vector3.zero;
 
-        print("Count" + m.vertices.Length);
+        //print("Count" + m.vertices.Length);
 
         foreach(Vector3 v in m.vertices)
         {
             Vector3 diff = point - v;
             float dist = diff.sqrMagnitude;
 
-            if (dist < minDist)
+            if (dist < minDist || minDist == -1)
             {
                 nearest = v;
                 minDist = dist;
-                print(v);
             }
         }
 
@@ -168,15 +170,26 @@ public class Paint : MonoBehaviour {
         //nearest = point + tempDist;
         //Vector3 trans = obj.transform.TransformPoint(nearest);
 
-		print ("Case B");
-
 		Vector3 origTrans = obj.transform.TransformPoint (point);
 		Vector3 newTrans = obj.transform.TransformPoint (nearest);
-		print ("Orig:" + origTrans.x + " " + origTrans.y + " " + origTrans.z);
-		print ("New:" + newTrans.x + " " + newTrans.y + " " + newTrans.z);
+		//print ("Orig:" + origTrans.x + " " + origTrans.y + " " + origTrans.z);
+		//print ("New:" + newTrans.x + " " + newTrans.y + " " + newTrans.z);
 
-        print("Finished");
 		return newTrans;
+    }
+
+    // Superior method to previous as it checks triangles in mesh instead of vertices for closest point (also more computationally expensive)
+    public Vector3 NearestPointTo(Vector3 point, GameObject obj)
+    {
+
+        MeshFilter m = obj.GetComponent<MeshFilter>();
+
+        var CPC = new BaryCentricDistance(m);
+        var res = CPC.GetClosestTriangleAndPoint(point);
+        var closest = res.closestPoint;
+
+        return closest;
+        
     }
 
 	public void resetFluid () {
@@ -197,14 +210,20 @@ public class Paint : MonoBehaviour {
         // Changing fluid status
 		fluidEnabled = !fluidEnabled;
 
-        if (fluidEnabled)
-        {
-            // If fluid is disabled, disable checkbox as well
-            snapping = false;
-            GameObject.Find("Snap").GetComponent<Toggle>().isOn = false;
-        }
+        //if (fluidEnabled)
+        //{
+        //    // If fluid is disabled, disable checkbox as well
+        //    snapping = false;
+        //    GameObject.Find("Snap").GetComponent<Toggle>().isOn = false;
+        //}
 
-        GameObject.Find("Snap").GetComponent<Toggle>().interactable = !GameObject.Find("Snap").GetComponent<Toggle>().interactable;
+        //GameObject.Find("Snap").GetComponent<Toggle>().interactable = !GameObject.Find("Snap").GetComponent<Toggle>().interactable;
 
     }
+
+    public void updateFluidColor()
+    {
+        fluid.GetComponent<ParticleSystem>().startColor = materials[0].color;
+    }
+
 }

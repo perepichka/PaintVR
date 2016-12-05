@@ -39,7 +39,7 @@ public class MenuScript : MonoBehaviour {
 		Button gravityBtn = gravity.GetComponent<Button>();
 		gravityBtn.onClick.AddListener(Gravity);
 
-		BrushThicknessSlider.minValue = 0.005f;
+		BrushThicknessSlider.minValue = 0.001f;
 		BrushThicknessSlider.maxValue = 0.03f;
 
 		Slider bts = BrushThicknessSlider.GetComponent<Slider> ();
@@ -96,6 +96,7 @@ public class MenuScript : MonoBehaviour {
 			star.SetActive (false);
 			teapot.SetActive (false);
 			robot.SetActive (false);
+            snap.GetComponent<Toggle>().interactable = true;
 			break;
 		case 1:
             GameObject.Find("PaintManager").GetComponent<Paint>().stencil = cube;
@@ -103,6 +104,7 @@ public class MenuScript : MonoBehaviour {
 			star.SetActive (false);
 			teapot.SetActive (false);
 			robot.SetActive (false);
+            snap.GetComponent<Toggle>().interactable = true;
 			break;
 		case 2:
             GameObject.Find("PaintManager").GetComponent<Paint>().stencil = star;
@@ -110,6 +112,7 @@ public class MenuScript : MonoBehaviour {
 			star.SetActive (true);
 			teapot.SetActive (false);
 			robot.SetActive (false);
+            snap.GetComponent<Toggle>().interactable = true;
 			break;
 		case 3:
             GameObject.Find("PaintManager").GetComponent<Paint>().stencil = teapot;
@@ -117,6 +120,7 @@ public class MenuScript : MonoBehaviour {
 			star.SetActive (false);
 			teapot.SetActive (true);
 			robot.SetActive (false);
+            snap.GetComponent<Toggle>().interactable = true;
 			break;
 		case 4:
             GameObject.Find("PaintManager").GetComponent<Paint>().stencil = robot;
@@ -124,7 +128,9 @@ public class MenuScript : MonoBehaviour {
 			star.SetActive (false);
 			teapot.SetActive (false);
 			robot.SetActive (true);
-			break;
+            paint.snapping = false;
+            snap.GetComponent<Toggle>().interactable = false;
+            break;
 		default:
 			break;			
 		}
