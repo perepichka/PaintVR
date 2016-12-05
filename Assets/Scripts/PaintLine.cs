@@ -119,17 +119,17 @@ namespace PaintUtilities {
 
 			if (rings == 2) {
 				updateRingVertices(0, previousRings[0], position - previousRings[1],
-					previousNormal, 0);
+					previousNormal);
 			}
 
 			if (rings >= 2) {
 				updateRingVertices(vertices.Count - parent.resolution, position,
-					position - previousRings[0], normal, 0);
+					position - previousRings[0], normal);
 				updateRingVertices(vertices.Count - parent.resolution * 2,
-					position, position - previousRings[0], normal, 1);
+					position, position - previousRings[0], normal);
 				updateRingVertices(vertices.Count - parent.resolution * 3,
 					previousRings[0], position - previousRings[1],
-					previousNormal, 1);
+					previousNormal);
 			}
 
 			previousRings[1] = previousRings[0];
@@ -161,15 +161,15 @@ namespace PaintUtilities {
 			}
 		}
 
-		private void updateRingVertices(int offset, Vector3 position, Vector3 direction, Vector3 normal, float radiusScale) {
+		private void updateRingVertices(int offset, Vector3 position, Vector3 direction, Vector3 normal) {
 			direction = direction.normalized;
 			normal = normal.normalized;
 
 			for (int i = 0; i < parent.resolution; i++) {
 				float angle = 360.0f * (i / (float)(parent.resolution));
 				Quaternion rotator = Quaternion.AngleAxis(angle, direction);
-				Vector3 ringSpoke = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.15f, handSpeed)) * radiusScale;
-				vertices[offset + i] = position + ringSpoke;
+				Vector3 ringVertex = rotator * normal * Mathf.Pow (parent.thickness, 1f / Mathf.Pow(pinchStrength - 0.15f, handSpeed));
+				vertices[offset + i] = position + ringVertex;
 			}
 		}
 	}
