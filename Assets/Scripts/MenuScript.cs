@@ -17,6 +17,7 @@ public class MenuScript : MonoBehaviour {
 	public Dropdown colorDD;
 	public GameObject erase;
 	public GameObject gravity;
+	public GameObject snap;
 
 	//Stencil variables
 	public GameObject cube;
@@ -73,6 +74,7 @@ public class MenuScript : MonoBehaviour {
 			ColorSelector.SetActive (true);
 			erase.SetActive (true);
 			gravity.SetActive (true);
+			snap.SetActive (true);
 			menuIsActive = true;
 		} else {
 			Stencils.SetActive (false);
@@ -81,6 +83,7 @@ public class MenuScript : MonoBehaviour {
 			ColorSelector.SetActive (false);
 			erase.SetActive (false);
 			gravity.SetActive (false);
+			snap.SetActive (false);
 			menuIsActive = false;
 		}
 	}
@@ -169,5 +172,10 @@ public class MenuScript : MonoBehaviour {
 		script.fluid.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
 		UnityEngine.ParticleSystem.CollisionModule mod = script.fluid.GetComponent<ParticleSystem>().collision;
 		mod.enabled = true;
+	}
+
+	public void Snap (){
+		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
+		script.snapping = !script.snapping;
 	}
 }

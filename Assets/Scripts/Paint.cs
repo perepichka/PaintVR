@@ -25,6 +25,7 @@ public class Paint : MonoBehaviour {
     // Stencil stuff
     public GameObject stencil;
     public float snapMax;
+	public bool snapping;
 
     private float MAKSYM_CONSTANT = 0.1f;
 
@@ -39,6 +40,7 @@ public class Paint : MonoBehaviour {
 
 	void Start() {
         stencil = null;
+		snapping = false;
 		paintLines = new PaintLine[pinchDetectors.Length];
 		for (int i = 0; i < pinchDetectors.Length; i++) {
 			paintLines[i] = new PaintLine(this);
@@ -83,7 +85,7 @@ public class Paint : MonoBehaviour {
 			}
 			if (pd.IsHolding) {
 
-				if (stencil == null || stencil.name == "Robot Kyle")
+				if (stencil == null || stencil.name == "Robot Kyle" || !snapping)
 				{
 					paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
 				} else
