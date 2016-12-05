@@ -59,6 +59,13 @@ public class Paint : MonoBehaviour {
 		for (int i = 0; i < pinchDetectors.Length; i++) {
 			paintLines[i] = new PaintLine(this);
 		}
+
+        for (int i = 0; i < paintLines.Length; i++) {
+			for (int j = 0; j < paintLines[i].copyMaterials.Length; j++) {
+				paintLines [i].copyMaterials [j].color = Color.green;
+			}
+		}
+        fluidColor = Color.green;
 	}
 
 	void Update() {
@@ -145,7 +152,7 @@ public class Paint : MonoBehaviour {
 						paintLines[index].UpdatePaintLine(pd.Position, strength, speed);
 					} else
 					{
-						paintLines[index].UpdatePaintLine(NearestPointTo(pd.Position, stencil), strength, speed);
+						paintLines[index].UpdatePaintLine(NearestVertexTo(pd.Position, stencil), strength, speed);
 					}
 				}
 			}
