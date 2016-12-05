@@ -171,6 +171,7 @@ public class MenuScript : MonoBehaviour {
 				paint.paintLines [i].copyMaterials [j].color = currentColor;
 			}
 		}
+        paint.fluidColor = currentColor;
 	}
 
 	void Erase()
@@ -192,8 +193,15 @@ public class MenuScript : MonoBehaviour {
 	{
 		Paint script = GameObject.Find("PaintManager").GetComponent<Paint>();
 
-		script.fluid1.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
-		script.fluid2.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+        if (paint.inVr)
+        {
+            script.fluid1.GetComponent<ParticleSystem>().gravityModifier = 0.1f;
+            script.fluid2.GetComponent<ParticleSystem>().gravityModifier = 0.1f;
+        } else
+        {
+            script.fluid1.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+            script.fluid2.GetComponent<ParticleSystem>().gravityModifier = -0.1f;
+        }
 		UnityEngine.ParticleSystem.CollisionModule mod = script.fluid1.GetComponent<ParticleSystem>().collision;
 		mod.enabled = true;
 		UnityEngine.ParticleSystem.CollisionModule mod2 = script.fluid2.GetComponent<ParticleSystem>().collision;

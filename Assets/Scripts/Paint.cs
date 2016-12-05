@@ -39,11 +39,18 @@ public class Paint : MonoBehaviour {
     public GameObject fluid2;
 	public bool fluidEnabled;
 
+    // VR optimization constant
+    public bool inVr;
+
+    // Color
+    public Color fluidColor;
+
 	void Awake() {
 		
 	}
 
 	void Start() {
+        fluidColor = Color.green;
         stencil = null;
 		snapping = false;
 		fluidEnabled = false;
@@ -89,7 +96,10 @@ public class Paint : MonoBehaviour {
 					fluid.GetComponent<ParticleSystem> ().gravityModifier = 0.0f;
 	                
 					Vector3 pos = pd.transform.position;
-					pos.y = -pos.y;
+					if (!inVr)
+                    {
+                        pos.y = -pos.y;
+                    }
 					fluid.transform.position = pos;
 				} else {
 					// Line stuff
@@ -112,13 +122,19 @@ public class Paint : MonoBehaviour {
                     // Fluid stuff
                     if (stencil == null || stencil.name == "Robot Kyle" || !snapping)
                     {
-                        Vector3 pos = pd.transform.position;
-                        pos.y = -pos.y;
+                        Vector3 pos = pd.Position;
+                        if (!inVr)
+                        {
+                            pos.y = -pos.y;
+                        }
                         fluid.transform.position = pos;
                     } else
                     {
-                        Vector3 pos = pd.transform.position;
-                        pos.y = -pos.y;
+                        Vector3 pos = pd.Position;
+                        if (!inVr)
+                        {
+                            pos.y = -pos.y;
+                        }
                         Vector3 nearest = NearestPointTo(pos, stencil);
                         fluid.transform.position = nearest;
                     }
@@ -223,7 +239,7 @@ public class Paint : MonoBehaviour {
 
     public void updateFluidColor()
     {
-        fluid.GetComponent<ParticleSystem>().startColor = materials[0].color;
+        fluid.GetComponent<ParticleSystem>().startColor = fluidColor;
     }
 
 }
