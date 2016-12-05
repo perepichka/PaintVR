@@ -142,7 +142,7 @@ public class Paint : MonoBehaviour {
                         {
                             pos.y = -pos.y;
                         }
-                        Vector3 nearest = NearestPointTo(pos, stencil);
+                        Vector3 nearest = NearestVertexTo(pos, stencil);
                         fluid.transform.position = nearest;
                     }
 				} else {
@@ -199,20 +199,6 @@ public class Paint : MonoBehaviour {
 		//print ("New:" + newTrans.x + " " + newTrans.y + " " + newTrans.z);
 
 		return newTrans;
-    }
-
-    // Superior method to previous as it checks triangles in mesh instead of vertices for closest point (also more computationally expensive)
-    public Vector3 NearestPointTo(Vector3 point, GameObject obj)
-    {
-
-        MeshFilter m = obj.GetComponent<MeshFilter>();
-
-        var CPC = new BaryCentricDistance(m);
-        var res = CPC.GetClosestTriangleAndPoint(point);
-        var closest = res.closestPoint;
-
-        return closest;
-        
     }
 
 	public void resetFluid () {

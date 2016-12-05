@@ -145,7 +145,14 @@ public class MenuScript : MonoBehaviour {
 	private void ChooseBrushType(Dropdown target) {
 		paint.materialIndex = target.value % 2;
 		paint.fluidEnabled = target.value == 2;
-		print (target.value);
+		if (paint.fluidEnabled)
+        {
+            snap.GetComponent<Toggle>().interactable = false;
+            snap.GetComponent<Toggle>().isOn = false;
+        } else
+        {
+            snap.GetComponent<Toggle>().interactable = true;
+        }
 	}
 		
 	private void ChooseColor(Dropdown target) {
