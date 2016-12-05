@@ -24,9 +24,15 @@ namespace PaintUtilities {
 		private float handSpeed = 0f;
 
 		private GameObject lastObject;
+		public Material[] copyMaterials;
 
 		public PaintLine (Paint parent) {
 			this.parent = parent;
+			copyMaterials = new Material[parent.materials.Length];
+			for (int i = 0; i < copyMaterials.Length; i++) {
+				copyMaterials [i] = new Material (parent.materials [i].shader);
+				copyMaterials [i].CopyPropertiesFromMaterial (parent.materials [i]);
+			}
 			position = new SmoothedVector3 ();
 			position.delay = 0.05f;
 			position.reset = true;
@@ -58,19 +64,16 @@ namespace PaintUtilities {
 			paintLine.transform.rotation = new Quaternion (0f, 0f, 0f, 1f);
 			paintLine.transform.localScale = new Vector3 (1f, 1f, 1f);
 
-			Material copy = new Material (parent.materials [0].shader);
-			copy.CopyPropertiesFromMaterial (parent.materials [0]);
+			Material copy = new Material (copyMaterials[parent.materialIndex].shader);
+			copy.CopyPropertiesFromMaterial (copyMaterials[parent.materialIndex]);
 			paintLine.AddComponent<MeshRenderer> ().sharedMaterial = copy;
 			paintLine.AddComponent<MeshFilter> ().mesh = mesh;
 			paintLine.AddComponent<Rigidbody> ().useGravity = false;
-			//paintLine.AddComponent<MeshCollider> ().convex = true;
-			// paintLine.GetComponent<MeshCollider> ().sharedMesh = mesh;
 			lastObject = paintLine;
 			return paintLine;
 		}
 
 		public void EndPaintLine () {
-			lastObject.AddComponent<MeshCollider> ().convex = false;
 			mesh.Optimize ();
 			mesh.UploadMeshData (true);
 		}
